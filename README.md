@@ -1,3 +1,5 @@
+To run the server- it is node server.js
+
 For Testing
 Unit Testing, command to run - npx mocha server.test.js
 
