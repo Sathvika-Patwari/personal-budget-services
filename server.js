@@ -16,13 +16,13 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.setHeader("Access-Control-Allow-Origin", "http://24.199.106.161");
   res.setHeader("Access-Control-Allow-Headers", "Content-type,Authorization");
   next();
 });
 
 const jwtMW = exjwt({ secret: secretKey, algorithms: ["HS256"] }).unless({
-    path: ["/api/signup", "/api/login"], // Paths that do not require a token
+    path: ["/api/signup", "/api/login"], 
   });
 
 app.post("/api/signup", (req, res) => {
@@ -41,7 +41,6 @@ app.post("/api/signup", (req, res) => {
         if (insertErr) {
           console.error("Error inserting user:", insertErr);
 
-          // Provide a more detailed error message based on the specific error
           let errorMessage;
           if (insertErr.code === "ER_DUP_ENTRY") {
             errorMessage =
@@ -64,13 +63,11 @@ app.post("/api/extend-token", jwtMW, (req, res) => {
   try {
     console.log("Request details:", req.auth.username);
 
-    // Check if req.user exists
     if (!req.auth.username) {
       console.error("User information not available in the token");
       return res.status(400).json({ error: "User information not available in the token" });
     }
 
-    // Access user information from the decoded token
     const { id, username } = req.auth;
 
     if (!id || !username) {
@@ -78,7 +75,6 @@ app.post("/api/extend-token", jwtMW, (req, res) => {
       return res.status(400).json({ error: "Invalid user information in the token" });
     }
 
-    // Create a new token with extended expiration
     const token = jwt.sign({ id, username }, secretKey, { expiresIn: "1m" });
     console.log("Token extended successfully:", { id, username });
 
@@ -86,7 +82,6 @@ app.post("/api/extend-token", jwtMW, (req, res) => {
   } catch (error) {
     console.error("Error extending token:", error);
 
-    // Log the error details for investigation
     res.status(500).json({ error: "Internal Server Error. Check server logs for details." });
   }
 });
@@ -152,11 +147,9 @@ app.get("/api/budget/:id", jwtMW, async (req, res) => {
 app.put('/api/budget/:budgetId',jwtMW, (req, res) => {
   const budgetId = req.params.budgetId;
   const { month, year, title, budget } = req.body;
-  // The fieldsToUpdate array will store the fields to be updated
   const fieldsToUpdate = [];
   const valuesToUpdate = [];
 
-  // Check if each field exists in the request body, and if yes, add it to the update query
   if (month !== undefined) {
     fieldsToUpdate.push('month');
     valuesToUpdate.push(month);
@@ -177,11 +170,9 @@ app.put('/api/budget/:budgetId',jwtMW, (req, res) => {
     valuesToUpdate.push(budget);
   }
 
-  // Construct the dynamic part of the SQL query based on the fields to be updated
   const dynamicSetClause = fieldsToUpdate.map((field) => `${field} = ?`).join(', ');
   const query = `UPDATE budget SET ${dynamicSetClause} WHERE budgetId = ?`;
 
-  // Execute the query with the dynamic values
   pool.query(query, [...valuesToUpdate, budgetId], (err, results) => {
     if (err) {
       console.error('Error updating budget:', err);
@@ -227,7 +218,7 @@ app.use((err, req, res, next) => {
   if (err.name === "UnauthorizedError") {
     return res.status(401).json({ error: "Unauthorized - Token is either missing or invalid" });
   }
-  next(); // Pass the error to the next middleware
+  next(); 
 });
 
 app.listen(port, () => {
