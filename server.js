@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://24.199.106.161");
+  res.setHeader("Access-Control-Allow-Origin", "http://24.199.106.161:3000");
   res.setHeader("Access-Control-Allow-Headers", "Content-type,Authorization");
   next();
 });
