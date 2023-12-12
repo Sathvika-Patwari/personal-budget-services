@@ -16,7 +16,8 @@ E2E Testing, command to run - npm run test:e2e
 
 For Visual Regression Testing, command to run - npm run visual-reg-test
 
-<img width="960" alt="image" src="https://github.com/Sathvika-Patwari/personal-budget-services/assets/59678215/10d98993-607e-4bff-ad8b-adc45ac52827">
+<img width="960" alt="image" src="https://github.com/Sathvika-Patwari/personal-budget-services/assets/59678215/2c4cf163-fa67-48a0-a613-cc17d07fe63f">
+
 
 
 
